@@ -31,11 +31,11 @@ RUN apt-get update && apt-get -y install \
 
 # Compile openresty from source.
 RUN \
-  wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz && \
-  tar -xzvf ngx_openresty-*.tar.gz && \
-  rm -f ngx_openresty-*.tar.gz && \
-  cd ngx_openresty-* && \
-  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.2/lua_cjson.c && \
+  wget https://openresty.org/download/openresty-1.13.6.2.tar.gz  && \
+  tar -xzvf openresty-*.tar.gz && \
+  rm -f openresty-*.tar.gz && \
+  cd openresty-* && \
+  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.6/lua_cjson.c && \
   ./configure \
   --prefix=/opt/openresty \
   --with-pcre-jit --with-ipv6 \
@@ -46,7 +46,7 @@ RUN \
   make install && \
   make clean && \
   cd .. && \
-  rm -rf ngx_openresty-*&& \
+  rm -rf openresty-*&& \
   ln -s /opt/openresty/nginx/sbin/nginx /usr/local/bin/nginx && \
   ln -sf /opt/openresty/nginx /opt/nginx && \
   ldconfig
@@ -74,3 +74,4 @@ EXPOSE 80 443
 # Define the default command.
 #CMD ["nginx", "-c", "/usr/local/openresty/nginx/conf/nginx.conf"]
 #CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
+CMD ["nginx", "-g", "daemon off;"]
